@@ -2,3 +2,8 @@ openai
 requests
 beautifulsoup4
 PyPDF2
+requests
+beautifulsoup4
+lxml
+openai
+newspaper3k
