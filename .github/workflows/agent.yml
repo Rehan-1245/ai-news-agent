@@ -10,24 +10,25 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4   # ✅ updated
+      - name: Checkout
+        uses: actions/checkout@v4   # ✅ UPDATED
 
-      - uses: actions/setup-python@v5   # ✅ updated
+      - name: Setup Python
+        uses: actions/setup-python@v5   # ✅ UPDATED
         with:
           python-version: "3.11"
 
-      # 🔥 REQUIRED for newspaper3k
       - name: Install system dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y libxml2-dev libxslt-dev python3-dev
 
-      - name: Install Python deps
+      - name: Install Python dependencies
         run: |
           pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Set env
+      - name: Set environment variables
         run: |
           echo "OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}" >> $GITHUB_ENV
           echo "MAKE_WEBHOOK_URL=${{ secrets.MAKE_WEBHOOK_URL }}" >> $GITHUB_ENV
