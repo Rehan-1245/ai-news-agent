@@ -2,7 +2,7 @@ name: AI News Agent
 
 on:
   schedule:
-    - cron: "30 3 * * *"
+    - cron: "30 3 * * *"   # ⏰ 9:00 AM IST
   workflow_dispatch:
 
 jobs:
@@ -10,26 +10,48 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      # 📥 Checkout code
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      - uses: actions/setup-python@v5
+      # 🐍 Setup Python
+      - name: Setup Python
+        uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
-      - name: Install system deps
+      # 🔧 Install system dependencies (needed for newspaper3k)
+      - name: Install system dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y libxml2-dev libxslt-dev python3-dev
 
-      - name: Install Python deps
+      # 📦 Install Python dependencies
+      - name: Install Python dependencies
         run: |
-          pip install --upgrade pip
+          python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Set env
+      # 🔐 Set environment variables (from GitHub Secrets)
+      - name: Set environment variables
         run: |
           echo "OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}" >> $GITHUB_ENV
           echo "MAKE_WEBHOOK_URL=${{ secrets.MAKE_WEBHOOK_URL }}" >> $GITHUB_ENV
 
-      - name: Run agent
-        run: python main.py
+      # 🔍 Debug (helps find errors fast)
+      - name: Debug info
+        run: |
+          echo "🔍 Python version:"
+          python --version
+
+          echo "📦 Installed packages:"
+          pip list
+
+          echo "🔑 OpenAI key length:"
+          echo $OPENAI_API_KEY | wc -c
+
+      # 🚀 Run your agent
+      - name: Run AI News Agent
+        run: |
+          echo "🚀 Starting agent..."
+          python main.py
